@@ -1,32 +1,143 @@
-# Prerequisites
-*.d
+//  main.cpp
+//  CS2 Inflation Lab
+//
+//  Created by Muna S
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+#include <iostream>
+using namespace std;
 
-# Precompiled Headers
-*.gch
-*.pch
+/*
+* InflationRate - calculates the inflation rate given the old and new consumer price index
+* @param old_cpi: is the consumer price index that it was a year ago
+* @param new_cpi: is the consumer price index that it is currently
+* @returns the computed inflation rate or 0 if inputs are invalid.
+*/
+double InflationRate(float old_cpi, float new_cpi);
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
+void getCPIValues (float& old_cpi, float& new_cpi);
 
-# Fortran module files
-*.mod
-*.smod
+void swap_values(double& rate1, double& rate2);
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
+void sortArrays(double array[], int arraySize);
 
-# Executables
-*.exe
-*.out
-*.app
+double findMedianRate(double array[], int arraySize); //float and int
+
+int main()
+{
+    //variables
+    const int MAX_RATES = 20;
+    float oldCPI, newCPI, totalSoFar = 0;
+    char yesNo;
+    float avg;
+    double iRate;
+    int count=0;
+    double inflationArray[MAX_RATES];
+    
+    //start of loop
+    do
+    {
+        
+        getCPIValues(oldCPI, newCPI); //calling function
+
+        iRate = InflationRate(oldCPI, newCPI); //calling inflationRate function
+
+        if (iRate!=0)
+            totalSoFar = totalSoFar + iRate;
+            inflationArray[count]= iRate;
+            count++;
+        
+        cout << "Inflation rate is " << iRate << endl; //output inflation rate
+        cout << "Try again? (y or Y): "; //replay. program runs again
+        cin >> yesNo;
+        
+    } while (yesNo == 'y' || yesNo == 'Y');
+    //end loop
+    
+    //calculates average
+    avg = totalSoFar / count; //count is num of computed rates. calculates average
+    
+    //output avg rate and median rate
+    cout << "Average rate is " << avg << endl;
+    cout << "Median rate is " << findMedianRate(iRate, count);
+    
+    
+    
+    return 0;
+}
+
+
+double InflationRate(float old_cpi, float new_cpi)
+{
+// TODO: Implement InflationRate to calculate the percentage increase or decrease
+// Use (new_cpi - old_cpi) / old_cpi * 100
+
+double results;
+
+if (old_cpi > 0 && new_cpi > 0)
+{
+    
+    results = (new_cpi - old_cpi) / old_cpi * 100;
+    return results;
+}
+    
+return 0;
+}
+
+void getCPIValues (float& old_cpi, float& new_cpi)
+
+{
+    do
+    {
+    cout << "Enter the old and new consumer price indices: ";
+    cin >> old_cpi >> new_cpi;
+        
+    if ((old_cpi <= 0) || (new_cpi >= 0))
+        {
+            cout << "Error: CPI values must be greater than 0."<< endl;
+        }
+    } while ((old_cpi <= 0) || (new_cpi >= 0));
+}
+
+void swap_values(double& rate1, double& rate2)
+{
+    double temp = rate1;
+    rate1 = rate2;
+    rate2 = temp;
+}
+
+void sortArrays(double array[], int arraySize)
+{
+    bool did1swap;
+    do
+    {
+        did1swap = false;
+        for (int i=0; i<arraySize - 1; i++)
+        {
+            if (array[i] > array[i+1])
+            {
+                swap_values(array[1],array[i+1]);
+                did1swap=true;
+            }
+          
+        }
+        
+    }  while (did1swap == true);
+}
+
+double findMedianRate (double array[], int arraySize)
+{
+   sortArrays(array, arraySize);
+    
+    if (arraySize % 2 == 0) //number of rates is even
+    {
+        return((array[arraySize / 2] + array[arraySize / 2 - 1] ) / 2 );
+    }
+    else
+    {
+        int medianIndex = (arraySize + 1) / 2; //number of rates is not even
+        return (array[medianIndex - 11]);
+    }
+}
+
+
+
